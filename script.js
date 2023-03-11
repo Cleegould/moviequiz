@@ -1,4 +1,24 @@
 $(function () {
+
+	const settings = {
+		"async": true,
+		"crossDomain": true,
+		"url": "https://quotable-api-motivational-funny-and-movie-quotes.p.rapidapi.com/movie_quotes",
+		"method": "GET",
+		"headers": {
+			"X-RapidAPI-Key": "837b163db4msh9ad161c9bfcd50cp1fa0d6jsncd86d97e9bd7",
+			"X-RapidAPI-Host": "quotable-api-motivational-funny-and-movie-quotes.p.rapidapi.com"
+		}
+	};
+
+	$.ajax(settings).done(function (response) {
+		console.log(response);
+		var modal = document.getElementById("myModal");
+		modal.style.display = "block";
+		$("#movieQuote").append(response.quote);
+		$("#movie").append(response.movie);
+	});
+
 	const apiKey = "bb20124838543378f16ab68d72df5e76";
 
 	$("#searchBtn").click(function () {
@@ -88,7 +108,27 @@ $(function () {
 				} else {
 					$("#results").append("<div class='pad-8 big-text red-text'>No Trailer</div><hr class='hr'>");
 				}
+				$("#saveResults").show();
+				$("#saveResults").click(function () {
+					var existingResults = JSON.parse(localStorage.getItem("PastResults") || '[]');
+						existingResults.push(response);
+						localStorage.setItem("PastResults", JSON.stringify(existingResults));
+				});
 			});									
 		}
-	}	
+	}
+
+	// Get the <span> element that closes the modal
+	var span = document.getElementsByClassName("close")[0];
+	// When the user clicks on <span> (x), close the modal
+	span.onclick = function () {
+		myModal.style.display = "none";
+	}
+
+	// When the user clicks anywhere outside of the modal, close it
+	window.onclick = function (event) {
+		if (event.target == myModal) {
+			myModal.style.display = "none";
+		}
+	}
 });
